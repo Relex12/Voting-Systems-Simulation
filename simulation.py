@@ -1,6 +1,7 @@
 from random import random
 from math import sqrt, pow, fsum, fabs
 import matplotlib.pyplot as plt
+import argparse
 
 from voting import *
 
@@ -20,66 +21,95 @@ def iniate_dict(number, dimension):
         dict[i] = element
     return (dict)
 
-def plot_grid(voters, candidates):
+def plot_grid(electors, candidates):
     fig, ax = plt.subplots()
-
-    ax.scatter([voters[v][0] for v in voters], [voters[v][1] for v in voters],
+    ax.scatter([electors[v][0] for v in electors], [electors[v][1] for v in electors],
     s=10, c="black")
     for c in candidates:
         ax.scatter(candidates[c][0], candidates[c][1])
         ax.annotate(str(c), (candidates[c][0], candidates[c][1]))
     ax.grid(True)
-    fig.suptitle("Voter and candidate positions")
-    plt.savefig("positions.png")
+    fig.suptitle("elector and candidate positions")
+    plt.savefig("img/positions.png")
 
 
-###########
-# GLOBALS #
-###########
+##############
+# PARAMETERS #
+##############
 
-space_dimension = 2
-number_of_voters = 50
-number_of_candidates = 10
+parser = argparse.ArgumentParser()
+parser.add_argument("-v", "--version", action="version", version='1.0')
+parser.add_argument("-d", "--dimension", type=int, default=2, help="number of dimensions to use")
+parser.add_argument("-e", "--electors", type=int, default=50, help="number of electors for the simulation")
+parser.add_argument("-c", "--candidates", type=int, default=10, help="number of candidates for the simulation")
+parser.add_argument("-t", "--threshold", type=float, default=0.5, help="rejection threshold for scoring methods")
+parser.add_argument("--noplot", action='store_true', help="creates the positions image")
+parser.add_argument("-r", "--repeat", type=int, default=1, help="number of repetitions of the simulation")
+parser.add_argument("-o", "--output", type=str, help="output file to write the results")
+parser.add_argument("--test", type=int, help="number of times to test the method given in the test() function")
+args = parser.parse_args()
 
 ########
 # MAIN #
 ########
 
 def main():
-    voters = iniate_dict(number_of_voters, space_dimension)
-    candidates = iniate_dict(number_of_candidates, space_dimension)
+    if args.output != None:
+        output_string = ""
 
-    plot_grid(voters, candidates)
+    for i in range (0, args.repeat):
+        electors = iniate_dict(args.electors, args.dimension)
+        candidates = iniate_dict(args.candidates, args.dimension)
 
-    distances = {voter: { candidate: distance(voters[voter], candidates[candidate]) for candidate in candidates} for voter in voters }
+        if not args.noplot:
+            plot_grid(electors, candidates)
 
-    ranked_preferences = {voter: [candidate for candidate, distance in sorted(distances[voter].items(), key=lambda item: item[1])] for voter in voters}
+        distances = {elector: { candidate: distance(electors[elector], candidates[candidate]) for candidate in candidates} for elector in electors }
+        ranked_preferences = {elector: [candidate for candidate, distance in sorted(distances[elector].items(), key=lambda item: item[1])] for elector in electors}
 
-    copy = ranked_preferences
-    print("plurality:\t", N_rounds(copy, 1))
-    copy = ranked_preferences
-    print("two round:\t", N_rounds(copy, 2))
-    copy = ranked_preferences
-    print("instant runoff:\t", N_rounds(copy, number_of_candidates-1))
-    copy = ranked_preferences
-    print("condorcet:\t", condorcet(copy))
-    copy = ranked_preferences
-    print("borda:\t\t", borda(copy))
+        if args.output == None:
+            print("plurality:\t\t", N_rounds(ranked_preferences, 1))
+            print("two round:\t\t", N_rounds(ranked_preferences, 2))
+            print("instant runoff:\t\t", N_rounds(ranked_preferences, args.candidates-1))
+            print("condorcet:\t\t", condorcet(ranked_preferences))
+            print("borda:\t\t\t", borda(ranked_preferences))
+            print("approval:\t\t", approval(distances, args.threshold))
+            print("majority judgement:\t", majority_judgement(distances, args.threshold))
 
-def test():
-    j = 0
-    max = 10000
-    for i in range (1, max+1):
-        voters = iniate_dict(number_of_voters, space_dimension)
-        candidates = iniate_dict(number_of_candidates, space_dimension)
-        distances = {voter: { candidate: distance(voters[voter], candidates[candidate]) for candidate in candidates} for voter in voters }
-        ranked_preferences = {voter: [candidate for candidate, distance in sorted(distances[voter].items(), key=lambda item: item[1])] for voter in voters}
-        copy = ranked_preferences
-        if (condorcet(copy) == None):
-            j+=1
-            print (j*100/i)
-    print (j*100/i)
+        else:
+            output_string += (str) (N_rounds(ranked_preferences, 1)) + ','
+            output_string += (str) (N_rounds(ranked_preferences, 1)) + ','
+            output_string += (str) (N_rounds(ranked_preferences, 2)) + ','
+            output_string += (str) (N_rounds(ranked_preferences, args.candidates-1)) + ','
+            output_string += (str) (condorcet(ranked_preferences)) + ','
+            output_string += (str) (borda(ranked_preferences)) + ','
+            output_string += (str) (approval(distances, args.threshold)) + ','
+            output_string += (str) (majority_judgement(distances, args.threshold)) + '\n'
+
+
+    if args.output != None:
+        f = open(args.output, "w", newline='\n')
+        f.write(output_string)
+        f.close()
+
+###############
+# VOTING TEST #
+###############
+
+def test(n):
+    count = 0
+    for i in range (0, n):
+        electors = iniate_dict(args.electors, args.dimension)
+        candidates = iniate_dict(args.candidates, args.dimension)
+        distances = {elector: { candidate: distance(electors[elector], candidates[candidate]) for candidate in candidates} for elector in electors }
+        ranked_preferences = {elector: [candidate for candidate, distance in sorted(distances[elector].items(), key=lambda item: item[1])] for elector in electors}
+        if (condorcet(ranked_preferences) == None):
+            count+=1
+            print (count*100/i)
+    print (count*100/n)
 
 if __name__ == '__main__':
-    main()
-    # test()
+    if args.test != None:
+        test(args.test)
+    else:
+        main()
