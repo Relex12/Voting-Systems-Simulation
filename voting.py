@@ -45,3 +45,37 @@ def borda(ranked):
         if (len([candidate for candidate in results.keys()]) >= 3):
             print ([candidate for candidate in results.keys()])
         return (condorcet(subset_ranked))
+
+def score_voting(distances, scale_size, threshold):
+    results = {c: [0 for i in range(0, scale_size)] for c in distances[0]}
+    for c in distances[0]:
+        for v in distances:
+            for i in range(0, scale_size-1):
+                if i*threshold/(scale_size-1) < distances[v][c] <= (i+1)*threshold/(scale_size-1):
+                    results[c][i] +=1
+            if distances[v][c] > threshold:
+                results[c][scale_size-1] += 1
+    return results
+
+def approval (distances, threshold):
+    scale = 2
+    results = score_voting(distances, scale, threshold)
+    winner = [c for c in distances[0] if results[c][0] == max([results[c][0] for c in distances[0]])]
+    if len(winner) == 1:
+        return winner[0]
+
+def majority_jugement (distances, threshold):
+    scale = 6
+    results = score_voting(distances, scale, threshold)
+    cumulative = {c: [sum(results[c][:i+1]) for i in range(0, scale)] for c in results}
+    majority_mentions = {c: i for i in range(scale-1, -1, -1) for c in results if cumulative[c][i] > len(distances)/2}
+    winners = [c for c in majority_mentions if majority_mentions[c] == min([majority_mentions[c] for c in majority_mentions])]
+    if majority_mentions[winners[0]] != scale-1:
+        opposants = {c: sum(results[c][majority_mentions[c]+1:]) for c in winners}
+        winners = [c for c in winners if opposants[c] == min([opposants[c] for c in winners])]
+        if len(winners) == 1:
+            return winners[0]
+    partisants = {c: sum(results[c][:majority_mentions[c]]) for c in winners}
+    winners = [c for c in winners if partisants[c] == max([partisants[c] for c in winners])]
+    if len(winners) == 1:
+        return winners[0]
