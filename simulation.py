@@ -10,9 +10,15 @@ from voting import *
 #############
 
 def distance(pointA, pointB):
+    """
+    Computes the Euclidean distance between two points in a vector space of any dimension.
+    """
     return sqrt(fsum([pow(fabs(pointA[i]-pointB[i]), 2) for i in range (0, len(pointA))]))
 
 def iniate_dict(number, dimension):
+    """
+    Initialises a dictionary with integers between 0 and *number* for keys and lists of *dimension* random numbers between 0 and 1 for values.
+    """
     dict = {}
     for i in range(0, number):
         element = []
@@ -22,6 +28,9 @@ def iniate_dict(number, dimension):
     return (dict)
 
 def plot_grid(electors, candidates):
+    """
+    Displays the position of voters and candidates **in the first two dimensions only** in the `img/positions.png` file.
+    """
     fig, ax = plt.subplots()
     ax.scatter([electors[v][0] for v in electors], [electors[v][1] for v in electors],
     s=10, c="black")
@@ -32,22 +41,6 @@ def plot_grid(electors, candidates):
     fig.suptitle("elector and candidate positions")
     plt.savefig("img/positions.png")
 
-
-##############
-# PARAMETERS #
-##############
-
-parser = argparse.ArgumentParser()
-parser.add_argument("-v", "--version", action="version", version='1.0')
-parser.add_argument("-d", "--dimension", type=int, default=2, help="number of dimensions to use")
-parser.add_argument("-e", "--electors", type=int, default=50, help="number of electors for the simulation")
-parser.add_argument("-c", "--candidates", type=int, default=10, help="number of candidates for the simulation")
-parser.add_argument("-t", "--threshold", type=float, default=0.5, help="rejection threshold for scoring methods")
-parser.add_argument("--noplot", action='store_true', help="creates the positions image")
-parser.add_argument("-r", "--repeat", type=int, default=1, help="number of repetitions of the simulation")
-parser.add_argument("-o", "--output", type=str, help="output file to write the results")
-parser.add_argument("--test", type=int, help="number of times to test the method given in the test() function")
-args = parser.parse_args()
 
 ########
 # MAIN #
@@ -97,6 +90,9 @@ def main():
 ###############
 
 def test(n):
+    """
+    Computes the undecidability rate of the current method (to be modified in the source code).
+    """
     count = 0
     for i in range (0, n):
         electors = iniate_dict(args.electors, args.dimension)
@@ -109,6 +105,24 @@ def test(n):
     print (count*100/n)
 
 if __name__ == '__main__':
+
+    ##############
+    # PARAMETERS #
+    ##############
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-v", "--version", action="version", version='1.0')
+    parser.add_argument("-d", "--dimension", type=int, default=2, help="number of dimensions to use")
+    parser.add_argument("-e", "--electors", type=int, default=50, help="number of electors for the simulation")
+    parser.add_argument("-c", "--candidates", type=int, default=10, help="number of candidates for the simulation")
+    parser.add_argument("-t", "--threshold", type=float, default=0.5, help="rejection threshold for scoring methods")
+    parser.add_argument("--noplot", action='store_true', help="creates the positions image")
+    parser.add_argument("-r", "--repeat", type=int, default=1, help="number of repetitions of the simulation")
+    parser.add_argument("-o", "--output", type=str, help="output file to write the results")
+    parser.add_argument("--test", type=int, help="number of times to test the method given in the test() function")
+    args = parser.parse_args()
+
+
     if args.test != None:
         test(args.test)
     else:
