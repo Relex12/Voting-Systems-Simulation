@@ -1,7 +1,8 @@
 from random import random
-from math import sqrt, pow, fsum, fabs
+from math import sqrt, pow, fsum, fabs, ceil
 import matplotlib.pyplot as plt
 import argparse
+import sys
 
 from voting import *
 
@@ -41,6 +42,14 @@ def plot_grid(electors, candidates):
     fig.suptitle("elector and candidate positions")
     plt.savefig("img/positions.png")
 
+def progress_bar(count,total,size=100,full='#',empty='.',prefix=""):
+    """
+    Displays a progress bar.
+    """
+    x = int(size*count/total)
+    sys.stdout.write("\r" + prefix + '[' + full*x + empty*(size-x) + '] ' + str(count).rjust(len(str(total)),' ')+"/"+str(total))
+    if count==total:
+        sys.stdout.write("\n")
 
 ########
 # MAIN #
@@ -94,15 +103,17 @@ def test(n):
     Computes the undecidability rate of the current method (to be modified in the source code).
     """
     count = 0
-    for i in range (0, n):
+    display_rate = 40
+    for i in range (1, n+1):
         electors = iniate_dict(args.electors, args.dimension)
         candidates = iniate_dict(args.candidates, args.dimension)
         distances = {elector: { candidate: distance(electors[elector], candidates[candidate]) for candidate in candidates} for elector in electors }
         ranked_preferences = {elector: [candidate for candidate, distance in sorted(distances[elector].items(), key=lambda item: item[1])] for elector in electors}
         if (condorcet(ranked_preferences) == None):
             count+=1
-            print (count*100/i)
-    print (count*100/n)
+        if i % display_rate == 0:
+            progress_bar(i,n, size=30, prefix="rate : " + str(count*100/i).ljust(18,'0')+"  ")
+    print(count*100/n)
 
 if __name__ == '__main__':
 

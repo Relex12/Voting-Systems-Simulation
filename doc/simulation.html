@@ -27,9 +27,10 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from random import random
-from math import sqrt, pow, fsum, fabs
+from math import sqrt, pow, fsum, fabs, ceil
 import matplotlib.pyplot as plt
 import argparse
+import sys
 
 from voting import *
 
@@ -69,6 +70,14 @@ def plot_grid(electors, candidates):
     fig.suptitle(&#34;elector and candidate positions&#34;)
     plt.savefig(&#34;img/positions.png&#34;)
 
+def progress_bar(count,total,size=100,full=&#39;#&#39;,empty=&#39;.&#39;,prefix=&#34;&#34;):
+    &#34;&#34;&#34;
+    Displays a progress bar.
+    &#34;&#34;&#34;
+    x = int(size*count/total)
+    sys.stdout.write(&#34;\r&#34; + prefix + &#39;[&#39; + full*x + empty*(size-x) + &#39;] &#39; + str(count).rjust(len(str(total)),&#39; &#39;)+&#34;/&#34;+str(total))
+    if count==total:
+        sys.stdout.write(&#34;\n&#34;)
 
 ########
 # MAIN #
@@ -122,15 +131,17 @@ def test(n):
     Computes the undecidability rate of the current method (to be modified in the source code).
     &#34;&#34;&#34;
     count = 0
-    for i in range (0, n):
+    display_rate = 40
+    for i in range (1, n+1):
         electors = iniate_dict(args.electors, args.dimension)
         candidates = iniate_dict(args.candidates, args.dimension)
         distances = {elector: { candidate: distance(electors[elector], candidates[candidate]) for candidate in candidates} for elector in electors }
         ranked_preferences = {elector: [candidate for candidate, distance in sorted(distances[elector].items(), key=lambda item: item[1])] for elector in electors}
         if (condorcet(ranked_preferences) == None):
             count+=1
-            print (count*100/i)
-    print (count*100/n)
+        if i % display_rate == 0:
+            progress_bar(i,n, size=30, prefix=&#34;rate : &#34; + str(count*100/i).ljust(18,&#39;0&#39;)+&#34;  &#34;)
+    print(count*100/n)
 
 if __name__ == &#39;__main__&#39;:
 
@@ -275,6 +286,25 @@ if __name__ == &#39;__main__&#39;:
     plt.savefig(&#34;img/positions.png&#34;)</code></pre>
 </details>
 </dd>
+<dt id="simulation.progress_bar"><code class="name flex">
+<span>def <span class="ident">progress_bar</span></span>(<span>count, total, size=100, full='#', empty='.', prefix='')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Displays a progress bar.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def progress_bar(count,total,size=100,full=&#39;#&#39;,empty=&#39;.&#39;,prefix=&#34;&#34;):
+    &#34;&#34;&#34;
+    Displays a progress bar.
+    &#34;&#34;&#34;
+    x = int(size*count/total)
+    sys.stdout.write(&#34;\r&#34; + prefix + &#39;[&#39; + full*x + empty*(size-x) + &#39;] &#39; + str(count).rjust(len(str(total)),&#39; &#39;)+&#34;/&#34;+str(total))
+    if count==total:
+        sys.stdout.write(&#34;\n&#34;)</code></pre>
+</details>
+</dd>
 <dt id="simulation.random"><code class="name flex">
 <span>def <span class="ident">random</span></span>(<span>)</span>
 </code></dt>
@@ -295,15 +325,17 @@ if __name__ == &#39;__main__&#39;:
     Computes the undecidability rate of the current method (to be modified in the source code).
     &#34;&#34;&#34;
     count = 0
-    for i in range (0, n):
+    display_rate = 40
+    for i in range (1, n+1):
         electors = iniate_dict(args.electors, args.dimension)
         candidates = iniate_dict(args.candidates, args.dimension)
         distances = {elector: { candidate: distance(electors[elector], candidates[candidate]) for candidate in candidates} for elector in electors }
         ranked_preferences = {elector: [candidate for candidate, distance in sorted(distances[elector].items(), key=lambda item: item[1])] for elector in electors}
         if (condorcet(ranked_preferences) == None):
             count+=1
-            print (count*100/i)
-    print (count*100/n)</code></pre>
+        if i % display_rate == 0:
+            progress_bar(i,n, size=30, prefix=&#34;rate : &#34; + str(count*100/i).ljust(18,&#39;0&#39;)+&#34;  &#34;)
+    print(count*100/n)</code></pre>
 </details>
 </dd>
 </dl>
@@ -323,6 +355,7 @@ if __name__ == &#39;__main__&#39;:
 <li><code><a title="simulation.iniate_dict" href="#simulation.iniate_dict">iniate_dict</a></code></li>
 <li><code><a title="simulation.main" href="#simulation.main">main</a></code></li>
 <li><code><a title="simulation.plot_grid" href="#simulation.plot_grid">plot_grid</a></code></li>
+<li><code><a title="simulation.progress_bar" href="#simulation.progress_bar">progress_bar</a></code></li>
 <li><code><a title="simulation.random" href="#simulation.random">random</a></code></li>
 <li><code><a title="simulation.test" href="#simulation.test">test</a></code></li>
 </ul>
