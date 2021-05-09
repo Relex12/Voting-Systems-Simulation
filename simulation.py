@@ -80,7 +80,6 @@ def main():
 
         else:
             output_string += (str) (N_rounds(ranked_preferences, 1)) + ','
-            output_string += (str) (N_rounds(ranked_preferences, 1)) + ','
             output_string += (str) (N_rounds(ranked_preferences, 2)) + ','
             output_string += (str) (N_rounds(ranked_preferences, args.candidates-1)) + ','
             output_string += (str) (condorcet(ranked_preferences)) + ','
