@@ -120,8 +120,8 @@ Le code est séparé en deux modules
 
 La documentation des modules `simulation.py` et `voting.py` est construite avec [pdoc3](https://pdoc3.github.io/pdoc/). Elle est disponible dans le dossier `doc/` du dépôt. Vous pouvez la consulter en ligne
 
-*   [`simulation.py`](https://relex12.github.io/fr/Voting-Systems-Simulation/doc/simulation)
-*   [`voting.py`](https://relex12.github.io/fr/Voting-Systems-Simulation/doc/voting)
+*   [`simulation.py`](https://relex12.github.io/Voting-Systems-Simulation/doc/simulation)
+*   [`voting.py`](https://relex12.github.io/Voting-Systems-Simulation/doc/voting)
 
 Pour générer la documentation, lancez la commande `pdoc --html -o doc/ *.py` . Vous pouvez aussi la regarder dans votre navigateur à l'adresse `localhost:8080` en exécutant `pdoc --http : *.py`.
 
