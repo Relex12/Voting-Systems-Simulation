@@ -114,7 +114,7 @@ optional arguments:
 The code is divided in two modules
 
 *   **`simulation.py`** is the main module, it will either computes the undecidability rate of the given method in the source code if `--test` is given as an argument (`test()`), or proceed with the simulation, first drawing lots for the position of electors and candidates (`iniate_dict()`), displaying the position in `positions.png` (`plot_grid()`), and finally calculating the distances between the electors and the candidates (`distance()`) before performing the voting systems.
-*   **`voting.py`** is the module containing the functions to elect a candidate based on electors preferences, details on the implementation and algorithms are available in the [documentation](https://relex12.github.io/fr/Voting-Systems-Simulation/doc/voting).
+*   **`voting.py`** is the module containing the functions to elect a candidate based on electors preferences, details on the implementation and algorithms are available in the [documentation](https://relex12.github.io/Voting-Systems-Simulation/doc/voting).
 
 ## Documentation
 

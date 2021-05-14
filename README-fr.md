@@ -13,7 +13,21 @@ Check out on GitHub
 
 ## Sommaire
 
-[toc]
+* [Voting-Systems-Simulation](#voting-systems-simulation)
+    * [Sommaire](#sommaire)
+    * [Ce que c'est](#ce-que-c'est)
+    * [Travaux connexes](#travaux-connexes)
+    * [Comment exécuter](#comment-exécuter)
+    * [Arguments de la ligne de commande](#arguments-de-la-ligne-de-commande)
+    * [Introduction au code](#introduction-au-code)
+    * [Documentation](#documentation)
+    * [Taux d'indécidabilité](#taux-d'indécidabilité)
+    * [Défauts de la modélisation](#défauts-de-la-modélisation)
+    * [Interprétation des résultats](#interprétation-des-résultats)
+    * [Travail restant](#travail-restant)
+    * [Licence](#licence)
+
+<!-- table of contents created by Adrian Bonnet, see https://Relex12.github.io/Markdown-Table-of-Contents for more -->
 
 ## Ce que c'est
 
@@ -100,7 +114,7 @@ optional arguments:
 Le code est séparé en deux modules
 
 *   **`simulation.py`** est le module principal, il va soit calculer le taux d'indécidabilité de la méthode de vote donnée dans le code source si `--test` est donné comme argument (`test()`), soit lancer la simulation, premièrement en tirant au hasard les positions des électeurs et des candidats (`initiate_dict()`), puis en affichant ces positions dans `positions.png` (`plot_grid()`), enfin en calculant les distances entre les électeurs et les candidats (`distances()`) avant de faire appel aux méthodes de vote.
-*   **`voting.py`** est le module qui contient les fonctions pour élire un candidat basé sur les préférences des électeurs, des détails sur l'implémentation et les algorithmes sont disponibles dans la [documentation](https://relex12.github.io/fr/Voting-Systems-Simulation/doc/voting).
+*   **`voting.py`** est le module qui contient les fonctions pour élire un candidat basé sur les préférences des électeurs, des détails sur l'implémentation et les algorithmes sont disponibles dans la [documentation](https://relex12.github.io/Voting-Systems-Simulation/doc/voting).
 
 ## Documentation
 
