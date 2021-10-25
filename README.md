@@ -9,6 +9,11 @@ Check out on GitHub
 
 [Lire en Français](https://relex12.github.io/fr/Voting-Systems-Simulation)
 
+Documentation:
+
+* [`voting.py`](https://relex12.github.io/Voting-Systems-Simulation/doc/voting.html)
+* [`simulation.py`](https://relex12.github.io/Voting-Systems-Simulation/doc/simulation.html)
+
 ---
 
 ## Summary
