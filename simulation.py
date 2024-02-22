@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from random import random
 from math import sqrt, pow, fsum, fabs, ceil
 import matplotlib.pyplot as plt
